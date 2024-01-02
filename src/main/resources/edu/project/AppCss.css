@@ -1,0 +1,11 @@
+* {
+    -fx-base: #C0C0C0;
+}
+
+.circleTextField {
+    -fx-shape: "M 300 400 A 50 50 0 1 1 400 150 A 50 50 0 1 1 300 400 ";
+}
+
+.transparentButton {
+    -fx-background-color: transparent;
+}
