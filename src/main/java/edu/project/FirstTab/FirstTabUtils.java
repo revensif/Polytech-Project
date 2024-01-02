@@ -50,10 +50,10 @@ public final class FirstTabUtils {
     }
 
     public static HBox getHbox(TextField circleTextField,
+                               TextField firstTextField,
                                TextField secondTextField,
                                TextField thirdTextField,
                                TextField fourthTextField,
-                               TextField firstTextField,
                                int counterForCircle) {
         HBox result = new HBox();
         List<TextField> textFields = List.of(circleTextField, firstTextField, secondTextField, thirdTextField, fourthTextField);
