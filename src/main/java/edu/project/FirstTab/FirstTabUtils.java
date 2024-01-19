@@ -22,17 +22,9 @@ public final class FirstTabUtils {
         firstTabPane.getChildren().removeIf((node) -> ((node instanceof Button) && (!node.equals(entityButton))));
     }
 
-    private static TextField makeCopyOfTextField(TextField textfield, TextField circleTextField, int counterForCircle) {
+    public static TextField makeCopyOfTextField(TextField textfield, TextField circleTextField, int counterForCircle) {
         TextField result = new TextField();
-        result.setAlignment(textfield.getAlignment());
-        result.setEditable(textfield.isEditable());
-        result.setLayoutX(textfield.getLayoutX());
-        result.setLayoutY(textfield.getLayoutY());
-        result.setMouseTransparent(textfield.isMouseTransparent());
-        result.setPrefHeight(textfield.getPrefHeight());
-        result.setPrefWidth(textfield.getPrefWidth());
-        result.getStyleClass().add(textfield.getStyleClass().getFirst());
-        result.setPromptText(textfield.getPromptText());
+        changeTextField(result, textfield);
         if (textfield.equals(circleTextField)) {
             result.getStyleClass().add(textfield.getStyleClass().getLast());
             result.setText(String.valueOf(counterForCircle));
@@ -96,20 +88,7 @@ public final class FirstTabUtils {
 
     public static int[] getButtonPosition(ActionEvent event, Button subLevelButton) {
         Button pressedButton = (Button) event.getSource();
-        double layoutX = pressedButton.getLayoutX();
-        double layoutY = pressedButton.getLayoutY();
-        int i = 0;
-        int j = 0;
-        while (layoutX != subLevelButton.getLayoutX()) {
-            layoutX -= LAYOUT_X;
-            i++;
-        }
-        while (layoutY != subLevelButton.getLayoutY()) {
-            layoutY -= LAYOUT_Y;
-            j++;
-        }
-        return new int[]{i, j};
+        return getInts(pressedButton.getLayoutX(), pressedButton.getLayoutY(), subLevelButton.getLayoutX(), subLevelButton.getLayoutY());
     }
-
 
 }
