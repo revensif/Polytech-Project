@@ -14,8 +14,8 @@ import static edu.project.HelloController.*;
 public final class SecondTabUtils {
 
     private static final int FIRST_TAB_SIZE = 5;
-    private static final double HBOX_HEIGHT = 25.0;
-    private static final double HBOX_WIDTH = 380.0;
+    public static final double HBOX_HEIGHT = 25.0;
+    public static final double HBOX_WIDTH = 380.0;
     private static final double SCROLL_PANE_HEIGHT = 51.0;
     private static final double SCROLL_PANE_WIDTH = 400.0;
 
@@ -33,12 +33,20 @@ public final class SecondTabUtils {
             TextField valueField) {
         for (Node node : firstTabPane.getChildren()) {
             if (node instanceof HBox) {
+                boolean flag = false;
                 if (node.equals(firstTabHBox)) {
                     continue;
                 }
                 HBox hbox = makeCopyOfHBox((HBox) node, parameterField, measurementField, valueField);
                 secondTabPane.getChildren().add(hbox);
+                if (hbox.getChildren().size() == 2) {
+                    hbox.setLayoutX(hbox.getLayoutX() - 16.0);
+                    flag = true;
+                }
                 int[] position = getHBoxPosition(hbox, secondTabHBox);
+                if (flag) {
+                    hbox.setLayoutX(hbox.getLayoutX() + 16.0);
+                }
                 Button button = getButton(position[0], position[1], parameterButton);
                 secondTabPane.getChildren().add(button);
             }

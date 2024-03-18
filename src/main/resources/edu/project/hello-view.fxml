@@ -67,8 +67,12 @@
             </AnchorPane>
         </ScrollPane>
     </Tab>
-    <Tab text="Матрица связей">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+    <Tab fx:id="matrixOfConnectionsTab" onSelectionChanged="#onMatrixOfConnectionsClicked" text="Матрица связей">
+        <ScrollPane pannable="true">
+            <AnchorPane fx:id="thirdTabPane" minHeight="0.0" minWidth="0.0">
+                <TextField fx:id="emptySquareField" editable="false" layoutX="75.0" layoutY="47.0" mouseTransparent="true" prefHeight="300.0" prefWidth="300.0" />
+            </AnchorPane>
+        </ScrollPane>
     </Tab>
     <Tab text="Свойства связей">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
