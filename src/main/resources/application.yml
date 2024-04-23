@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: bot
+  jackson:
+    time-zone: UTC
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+client:
+  chatGPT:
+    base-url: https://api.openai.com
+    api-key: ""
