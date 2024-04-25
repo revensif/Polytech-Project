@@ -14,5 +14,5 @@ public class Entity {
     private String name;
     private String ontology;
     private String description;
-    private int attribute;
+    private String attribute;
 }

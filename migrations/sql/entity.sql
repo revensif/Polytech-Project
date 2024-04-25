@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS entity
     name TEXT,
     ontology TEXT,
     description TEXT,
-    attribute BIGINT,
+    attribute TEXT,
 
     PRIMARY KEY (entity_id)
 )

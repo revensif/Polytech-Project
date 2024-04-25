@@ -14,7 +14,7 @@ public class EntityRowMapper implements RowMapper<Entity> {
         String name = rs.getString("name");
         String ontology = rs.getString("ontology");
         String description = rs.getString("description");
-        int attribute = rs.getInt("attribute");
+        String attribute = rs.getString("attribute");
         return new Entity(entityId, name, ontology, description, attribute);
     }
 }

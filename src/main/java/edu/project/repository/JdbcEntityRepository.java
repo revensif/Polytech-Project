@@ -15,7 +15,7 @@ public class JdbcEntityRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public Entity addEntity(int entityId, String name, String ontology, String description, int attribute) {
+    public Entity addEntity(int entityId, String name, String ontology, String description, String attribute) {
         jdbcTemplate.update("INSERT INTO entity VALUES (?, ?, ?, ?, ?)", entityId, name, ontology, description, attribute);
         return findById(entityId);
     }

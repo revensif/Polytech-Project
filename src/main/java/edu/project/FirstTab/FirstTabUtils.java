@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.project.HelloController.*;
+import static edu.project.PolytechController.*;
 
 public final class FirstTabUtils {
 

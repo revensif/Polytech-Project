@@ -20,7 +20,7 @@ public class JdbcEntityRepositoryTest extends IntegrationTest {
     private static final String NAME = "name";
     private static final String ONTOLOGY = "ontology";
     private static final String DESCRIPTION = "description";
-    private static final int ATTRIBUTE = 12;
+    private static final String ATTRIBUTE = "attribute";
     private static final String MEASURE_UNIT = "unit";
     private static final int VALUE = 7;
     private static final Parameter FIRST_PARAMETER = new Parameter(FIRST_ID, NAME, MEASURE_UNIT, VALUE);

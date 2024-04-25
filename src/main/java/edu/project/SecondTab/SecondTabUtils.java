@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import static edu.project.FirstTab.FirstTabUtils.getButton;
-import static edu.project.HelloController.*;
+import static edu.project.PolytechController.*;
 
 public final class SecondTabUtils {
 

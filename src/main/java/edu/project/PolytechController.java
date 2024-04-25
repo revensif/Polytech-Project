@@ -25,7 +25,7 @@ import static edu.project.FirstTab.FirstTabUtils.*;
 import static edu.project.SecondTab.SecondTabUtils.*;
 
 @Component
-public class HelloController {
+public class PolytechController {
     private final Map<Point, Integer> BUTTON_CLICKS = new HashMap<>();
     private final Map<Point, Integer> PARAMETER_CLICKS = new HashMap<>();
     private final List<Entity> ENTITIES = new ArrayList<>();

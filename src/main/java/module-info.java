@@ -26,6 +26,12 @@ open module edu.project.polytechproject {
     requires reactor.netty.http;
     requires java.base;
     requires spring.aop;
+    requires com.fasterxml.jackson.annotation;
+    requires java.net.http;
+    requires org.apache.logging.log4j;
+    requires org.json;
+    requires jakarta.validation;
+    requires jpro.webapi;
 
     exports edu.project;
 }
