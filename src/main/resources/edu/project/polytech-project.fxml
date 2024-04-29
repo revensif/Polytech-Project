@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -73,7 +74,13 @@
         </ScrollPane>
     </Tab>
     <Tab text="Свойства связей">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <TextArea fx:id="characteristics" layoutX="61.0" layoutY="215.0" prefHeight="112.0" prefWidth="352.0" promptText="Качественные характеристики связи" />
+            <TextArea fx:id="formula" accessibleRoleDescription="y" layoutX="168.0" layoutY="77.0" prefHeight="110.0" prefWidth="154.0" promptText="Формула мат. модели" />
+            <TextField fx:id="verticalEntity" alignment="CENTER" layoutX="171.0" layoutY="41.0" promptText="Сущность Y" styleClass="transparentButton" />
+            <TextField fx:id="horizontalEntity" alignment="CENTER" layoutX="14.0" layoutY="120.0" promptText="Сущность X" styleClass="transparentButton" />
+         </children></AnchorPane>
     </Tab>
     <Tab text="Математические модели">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />

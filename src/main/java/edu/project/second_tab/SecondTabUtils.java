@@ -1,4 +1,4 @@
-package edu.project.SecondTab;
+package edu.project.second_tab;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -8,8 +8,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
-import static edu.project.FirstTab.FirstTabUtils.getButton;
 import static edu.project.PolytechController.*;
+import static edu.project.first_tab.FirstTabUtils.getButton;
 
 public final class SecondTabUtils {
 

@@ -32,6 +32,7 @@ open module edu.project.polytechproject {
     requires org.json;
     requires jakarta.validation;
     requires jpro.webapi;
+    requires javafx.base;
 
     exports edu.project;
 }

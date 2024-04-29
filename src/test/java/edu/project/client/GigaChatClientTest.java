@@ -1,6 +1,5 @@
 package edu.project.client;
 
-import edu.project.configuration.ClientConfigurationProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,18 +9,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class GigaChatClientTest {
 
-    @Autowired
-    private GigaChatClient client;
+    private static final long EXPIRATION_TIME = 1790000;
+    private static final int TOKEN_SIZE = 1233;
 
     @Autowired
-    private ClientConfigurationProperties properties;
+    private GigaChatClient client;
 
     @Test
     void shouldGetGigaChatTokenResponse() {
         GigaChatTokenResponse response = client.getGigaChatToken();
         assertThat(response).isNotNull();
-        assertThat(response.getExpiresAt()).isGreaterThan(System.currentTimeMillis() + 1790000);
-        assertThat(response.getAccessToken().length()).isEqualTo(1233);
+        assertThat(response.getExpiresAt()).isGreaterThan(System.currentTimeMillis() + EXPIRATION_TIME);
+        assertThat(response.getAccessToken().length()).isEqualTo(TOKEN_SIZE);
     }
 
     @Test

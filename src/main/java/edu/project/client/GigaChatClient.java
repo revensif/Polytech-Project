@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,7 +19,7 @@ import static java.net.http.HttpClient.newHttpClient;
 import static java.net.http.HttpRequest.newBuilder;
 
 @Log4j2
-@Component
+@Service
 @EnableConfigurationProperties(ClientConfigurationProperties.class)
 public class GigaChatClient {
 
@@ -38,7 +38,7 @@ public class GigaChatClient {
         this.data = properties.gigaChat().data();
     }
 
-    GigaChatTokenResponse getGigaChatToken() {
+    public GigaChatTokenResponse getGigaChatToken() {
         try (HttpClient client = newHttpClient()) {
             HttpRequest request = buildHttpRequestForToken();
             String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
@@ -114,7 +114,7 @@ public class GigaChatClient {
                   "top_p": 0.1,
                   "n": 1,
                   "stream": false,
-                  "max_tokens": 50,
+                  "max_tokens": 200,
                   "repetition_penalty": 1,
                   "update_interval": 0
                 }

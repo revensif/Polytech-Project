@@ -1,15 +1,22 @@
 package edu.project;
 
-import edu.project.FirstTab.Point;
+import edu.project.client.GigaChatClient;
+import edu.project.first_tab.Point;
+import impl.org.controlsfx.spreadsheet.CellView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import lombok.RequiredArgsConstructor;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
@@ -21,10 +28,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static edu.project.FirstTab.FirstTabUtils.*;
-import static edu.project.SecondTab.SecondTabUtils.*;
+import static edu.project.first_tab.FirstTabUtils.*;
+import static edu.project.second_tab.SecondTabUtils.*;
 
 @Component
+@RequiredArgsConstructor
 public class PolytechController {
     private final Map<Point, Integer> BUTTON_CLICKS = new HashMap<>();
     private final Map<Point, Integer> PARAMETER_CLICKS = new HashMap<>();
@@ -94,6 +102,8 @@ public class PolytechController {
 
     @FXML
     private AnchorPane thirdTabPane;
+
+    private final GigaChatClient client;
 
     @FXML
     protected void onSubLevelClicked(ActionEvent event) {
@@ -215,6 +225,9 @@ public class PolytechController {
 
     @FXML
     private void onMatrixOfConnectionsClicked() {
+        if (!thirdTabPane.getChildren().isEmpty()) {
+            return;
+        }
         int tableSize = ENTITIES.size() + 1;
         GridBase gridBase = new GridBase(tableSize, tableSize);
         ObservableList<ObservableList<SpreadsheetCell>> rows = FXCollections.observableArrayList();
@@ -225,29 +238,68 @@ public class PolytechController {
         spreadsheetView.setPrefHeight(tableSize * 400);
         spreadsheetView.setPrefWidth(tableSize * 400);
         spreadsheetView.getColumns().forEach(spreadsheetColumn -> spreadsheetColumn.setPrefWidth(100));
+        spreadsheetView.addEventFilter(MouseEvent.MOUSE_CLICKED, new MouseHandler());
         thirdTabPane.getChildren().add(spreadsheetView);
+    }
+
+    private void handleMouseEvent(MouseEvent event, SpreadsheetCell cell, CellView view) {
+        if (event.getButton().equals(MouseButton.SECONDARY)) {
+            TextField verticalEntity = (TextField) ENTITIES.get(cell.getColumn() - 1).node;
+            TextField horizontalEntity = (TextField) ENTITIES.get(cell.getRow() - 1).node;
+            mainTabPane.getSelectionModel().select(3);
+        }
+    }
+
+    private CellView getCorrectView(MouseEvent event) {
+        if (event.getTarget() instanceof Text text) {
+            if (!(text.getParent() instanceof CellView)) {
+                return null;
+            }
+            return (CellView) text.getParent();
+        } else {
+            return (CellView) event.getTarget();
+        }
     }
 
     private void getRows(GridBase gridBase, ObservableList<ObservableList<SpreadsheetCell>> rows) {
         for (int row = 0; row < gridBase.getRowCount(); ++row) {
             ObservableList<SpreadsheetCell> currentRow = FXCollections.observableArrayList();
             for (int column = 0; column < gridBase.getColumnCount(); ++column) {
+                if ((row == 0) && (column == 0)) {
+                    createCell(row, column, currentRow, "", false);
+                    continue;
+                }
                 if ((column != 0) && (row == 0)) {
                     TextField textField = (TextField) ENTITIES.get(column - 1).node;
-                    SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, textField.getText());
-                    cell.setEditable(false);
-                    currentRow.add(cell);
-                } else if ((column == 0) && (row != 0)) {
+                    createCell(row, column, currentRow, textField.getText(), false);
+                } else if (column == 0) {
                     TextField textField = (TextField) ENTITIES.get(row - 1).node;
-                    SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, textField.getText());
-                    cell.setEditable(false);
-                    currentRow.add(cell);
+                    createCell(row, column, currentRow, textField.getText(), false);
                 } else {
-                    currentRow.add(SpreadsheetCellType.STRING.createCell(row, column, 1, 1, ""));
+                    createCell(row, column, currentRow, client.getGigaChatToken().getAccessToken(), true);
                 }
             }
             rows.add(currentRow);
         }
+    }
+
+    private static void createCell(
+            int row,
+            int column,
+            ObservableList<SpreadsheetCell> currentRow,
+            String text,
+            boolean editable) {
+        SpreadsheetCell cell = SpreadsheetCellType.STRING.createCell(row, column, 1, 1, text);
+        cell.setEditable(editable);
+        currentRow.add(cell);
+    }
+
+    private static String constructMessageForDescription(String firstEntity, String secondEntity) {
+        String construct = "Задача - описать связь между компонентами газораспределительной "
+                + "станции в контексте системной инженерии. "
+                + "Описать нужно конкретно без вводных и заключительных фраз. "
+                + "Первый элемент: %s; Второй элемент: %s.";
+        return String.format(construct, firstEntity, secondEntity);
     }
 
     public static void changeTextField(TextField result, TextField textfield) {
@@ -278,7 +330,27 @@ public class PolytechController {
         return new int[]{i, j};
     }
 
-    public record Entity(String level, Node node) {
+    private record Entity(String level, Node node) {
+    }
+
+    private class MouseHandler implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent event) {
+            if (!(event.getTarget() instanceof Text) && !(event.getTarget() instanceof CellView)) {
+                return;
+            }
+            CellView view = getCorrectView(event);
+            if (view == null) {
+                return;
+            }
+            SpreadsheetCell cell = view.getItem();
+            if ((cell.getColumn() == 0) || (cell.getRow() == 0)) {
+                return;
+            }
+            handleMouseEvent(event, cell, view);
+            event.consume();
+        }
     }
 
 }

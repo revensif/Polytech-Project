@@ -21,7 +21,8 @@ public class JdbcParameterRepository {
     }
 
     public Parameter deleteParameter(int entityId, String name, String measureUnit, int value) {
-        Parameter removedParameter = findParameterByAllFieldsExceptParameterId(entityId, name, measureUnit, value).getFirst();
+        List<Parameter> parameters = findParameterByAllFieldsExceptParameterId(entityId, name, measureUnit, value);
+        Parameter removedParameter = parameters.isEmpty() ? null : parameters.getFirst();
         jdbcTemplate.update(
                 "DELETE FROM parameter WHERE entity_id = ? AND name = ? AND measure_unit = ? AND value = ?",
                 entityId, name, measureUnit, value);

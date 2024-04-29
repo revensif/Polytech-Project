@@ -1,7 +1,7 @@
 package edu.project.repository;
 
 import edu.project.IntegrationTest;
-import edu.project.repository.entity.Parameter;
+import edu.project.repository.entity.Entity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,39 +21,63 @@ public class JdbcEntityRepositoryTest extends IntegrationTest {
     private static final String ONTOLOGY = "ontology";
     private static final String DESCRIPTION = "description";
     private static final String ATTRIBUTE = "attribute";
-    private static final String MEASURE_UNIT = "unit";
-    private static final int VALUE = 7;
-    private static final Parameter FIRST_PARAMETER = new Parameter(FIRST_ID, NAME, MEASURE_UNIT, VALUE);
-    private static final Parameter SECOND_PARAMETER = new Parameter(SECOND_ID, NAME, MEASURE_UNIT, VALUE);
+    private static final Entity FIRST_ENTITY = new Entity(FIRST_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+    private static final Entity SECOND_ENTITY = new Entity(SECOND_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
 
     @Autowired
     private JdbcEntityRepository entityRepository;
 
-    @Autowired
-    private JdbcParameterRepository parameterRepository;
+    @Test
+    void shouldAddEntityToDatabase() {
+        //arrange + act + assert
+        assertThat(entityRepository.findAll().size()).isEqualTo(0);
+        assertThat(entityRepository.findAll()).isEmpty();
+        assertThat(entityRepository.addEntity(FIRST_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE)).isEqualTo(FIRST_ENTITY);
+        assertThat(entityRepository.findAll().size()).isEqualTo(1);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(FIRST_ENTITY));
+        assertThat(entityRepository.addEntity(SECOND_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE)).isEqualTo(SECOND_ENTITY);
+        assertThat(entityRepository.findAll().size()).isEqualTo(2);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(FIRST_ENTITY, SECOND_ENTITY));
+    }
 
     @Test
-    void shouldAddParameterToDatabase() {
+    void shouldDeleteEntityFromDatabase() {
         //arrange
-        prepareDatabase();
-        //act
-        parameterRepository.addParameter(FIRST_ID, NAME, MEASURE_UNIT, VALUE);
-        parameterRepository.addParameter(SECOND_ID, NAME, MEASURE_UNIT, VALUE);
-        //assert
-        assertThat(parameterRepository.findAll().size()).isEqualTo(2);
-        assertThat(parameterRepository.findAll()).isEqualTo(List.of(FIRST_PARAMETER, SECOND_PARAMETER));
-        assertThat(parameterRepository.findAllParametersByEntityId(FIRST_ID)).isEqualTo(List.of(FIRST_PARAMETER));
-        assertThat(parameterRepository.findAllParametersByEntityId(SECOND_ID)).isEqualTo(List.of(SECOND_PARAMETER));
-        assertThat(parameterRepository.findAllParametersByEntityId(VALUE)).isEmpty();
-    }
-
-    @Test
-    void shouldFindAllParametersFromDatabase() {
-
-    }
-
-    private void prepareDatabase() {
         entityRepository.addEntity(FIRST_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
         entityRepository.addEntity(SECOND_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+        //act + assert
+        assertThat(entityRepository.findAll().size()).isEqualTo(2);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(FIRST_ENTITY, SECOND_ENTITY));
+        assertThat(entityRepository.deleteEntity(FIRST_ID)).isEqualTo(FIRST_ENTITY);
+        assertThat(entityRepository.findAll().size()).isEqualTo(1);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(SECOND_ENTITY));
+        assertThat(entityRepository.deleteEntity(3)).isNull();
+        assertThat(entityRepository.findAll().size()).isEqualTo(1);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(SECOND_ENTITY));
+        assertThat(entityRepository.deleteEntity(SECOND_ID)).isEqualTo(SECOND_ENTITY);
+        assertThat(entityRepository.findAll().size()).isEqualTo(0);
+        assertThat(entityRepository.findAll()).isEmpty();
+    }
+
+    @Test
+    void shouldFindById() {
+        //arrange + act + assert
+        assertThat(entityRepository.findById(FIRST_ID)).isNull();
+        entityRepository.addEntity(FIRST_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+        assertThat(entityRepository.findById(FIRST_ID)).isEqualTo(FIRST_ENTITY);
+        entityRepository.addEntity(SECOND_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+        assertThat(entityRepository.findById(SECOND_ID)).isEqualTo(SECOND_ENTITY);
+    }
+
+    @Test
+    void shouldFindAllEntities() {
+        //arrange + act + assert
+        assertThat(entityRepository.findAll()).isEmpty();
+        entityRepository.addEntity(FIRST_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+        assertThat(entityRepository.findAll().size()).isEqualTo(1);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(FIRST_ENTITY));
+        entityRepository.addEntity(SECOND_ID, NAME, ONTOLOGY, DESCRIPTION, ATTRIBUTE);
+        assertThat(entityRepository.findAll().size()).isEqualTo(2);
+        assertThat(entityRepository.findAll()).isEqualTo(List.of(FIRST_ENTITY, SECOND_ENTITY));
     }
 }

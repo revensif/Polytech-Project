@@ -1,4 +1,4 @@
-package edu.project.FirstTab;
+package edu.project.first_tab;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;

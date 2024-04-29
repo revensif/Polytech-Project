@@ -1,6 +1,6 @@
 package edu.project;
 
-import javafx.application.Application;
+import com.jpro.webapi.JProApplication;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-public class PolytechApplication extends Application {
+public class PolytechApplication extends JProApplication {
 
     private Parent rootNode;
 
@@ -24,7 +24,6 @@ public class PolytechApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-
         Scene scene = new Scene(rootNode, 600, 600);
         stage.setTitle("PolyTech Project!");
         stage.setScene(scene);

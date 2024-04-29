@@ -20,6 +20,12 @@ public class JdbcEntityRepository {
         return findById(entityId);
     }
 
+    public Entity deleteEntity(int entityId) {
+        Entity removedEntity = findById(entityId);
+        jdbcTemplate.update("DELETE FROM entity WHERE entity_id = ?", entityId);
+        return removedEntity;
+    }
+
     public Entity findById(int entityId) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM entity WHERE entity_id = ?", new EntityRowMapper(), entityId);
