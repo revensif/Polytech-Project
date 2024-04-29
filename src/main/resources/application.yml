@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: polytech
+  jackson:
+    time-zone: UTC
+  liquibase:
+    enabled: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+client:
+  giga-chat:
+    base-url-token: "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
+    base-url-response: "https://gigachat.devices.sberbank.ru/api/v1/chat/completions"
+    client-secret: ${SECRET}
+    data: ${DATA}
