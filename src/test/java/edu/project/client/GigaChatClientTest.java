@@ -38,7 +38,7 @@ public class GigaChatClientTest {
                   "top_p": 0.1,
                   "n": 1,
                   "stream": false,
-                  "max_tokens": 50,
+                  "max_tokens": 200,
                   "repetition_penalty": 1,
                   "update_interval": 0
                 }

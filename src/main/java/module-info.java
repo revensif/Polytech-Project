@@ -33,6 +33,7 @@ open module edu.project.polytechproject {
     requires jakarta.validation;
     requires jpro.webapi;
     requires javafx.base;
+    requires com.udojava.evalex;
 
     exports edu.project;
 }

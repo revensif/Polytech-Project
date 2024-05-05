@@ -2,6 +2,8 @@ package edu.project;
 
 import edu.project.client.GigaChatClient;
 import edu.project.first_tab.Point;
+import edu.project.repository.JdbcEntityRepository;
+import edu.project.repository.JdbcParameterRepository;
 import impl.org.controlsfx.spreadsheet.CellView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,16 +19,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.controlsfx.control.spreadsheet.GridBase;
 import org.controlsfx.control.spreadsheet.SpreadsheetCell;
 import org.controlsfx.control.spreadsheet.SpreadsheetCellType;
 import org.controlsfx.control.spreadsheet.SpreadsheetView;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static edu.project.first_tab.FirstTabUtils.*;
 import static edu.project.second_tab.SecondTabUtils.*;
@@ -37,11 +40,14 @@ public class PolytechController {
     private final Map<Point, Integer> BUTTON_CLICKS = new HashMap<>();
     private final Map<Point, Integer> PARAMETER_CLICKS = new HashMap<>();
     private final List<Entity> ENTITIES = new ArrayList<>();
+    private final Map<String, String> MATH_MODELS = new HashMap<>();
+    private final Map<String, Integer> ENTITIES_ID = new HashMap<>();
     public static final int LAYOUT_X = 40;
     public static final int LAYOUT_Y = 80;
     public static final double SPACING = 1.0;
     private int counterForCircle;
     private int counterForY = 1;
+    private int counterForModel = 2;
     private static final String PARAMETER = "Параметр ";
     private int mainEntitiesCounter = 1;
     private Button prevButton;
@@ -62,6 +68,9 @@ public class PolytechController {
     private Button entityButton;
 
     @FXML
+    private Button entityDatabaseButton;
+
+    @FXML
     private TextField firstTextField;
 
     @FXML
@@ -77,13 +86,13 @@ public class PolytechController {
     private TextField circleTextField;
 
     @FXML
-    private Tab parametrizationTab;
-
-    @FXML
     private HBox secondTabHBox;
 
     @FXML
     private Button parameterButton;
+
+    @FXML
+    private Button parameterDatabaseButton;
 
     @FXML
     private AnchorPane secondTabPane;
@@ -98,12 +107,49 @@ public class PolytechController {
     private TextField valueField;
 
     @FXML
-    private Tab matrixOfConnectionsTab;
-
-    @FXML
     private AnchorPane thirdTabPane;
 
+    @FXML
+    private TextField verticalEntity;
+
+    @FXML
+    private TextField horizontalEntity;
+
+    @FXML
+    private TextArea characteristics;
+
+    @FXML
+    private TextArea formula;
+
+    @FXML
+    private AnchorPane modelPane;
+
+    @FXML
+    private Button modelCreation;
+
+    @FXML
+    private HBox modelHBox;
+
+    @FXML
+    private TextField modelCircle;
+
+    @FXML
+    private TextField modelName;
+
+    @FXML
+    private TextField formulaField;
+
+    @FXML
+    private TextArea parametersField;
+
+    @FXML
+    private TextArea connectionChoice;
+
     private final GigaChatClient client;
+
+    private final JdbcEntityRepository entityRepository;
+
+    private final JdbcParameterRepository parameterRepository;
 
     @FXML
     protected void onSubLevelClicked(ActionEvent event) {
@@ -138,6 +184,7 @@ public class PolytechController {
         firstTabPane.getChildren().add(hBox);
         firstTabPane.getChildren().add(button);
         entityButton.setLayoutY(entityButton.getLayoutY() + LAYOUT_Y);
+        entityDatabaseButton.setLayoutY(entityDatabaseButton.getLayoutY() + LAYOUT_Y);
     }
 
     @FXML
@@ -149,12 +196,13 @@ public class PolytechController {
         HBox hBox = getHbox(circleTextField, firstTextField, secondTextField, thirdTextField, fourthTextField, counterForCircle);
         Button button = getButton(0, counterForY, subLevelButton);
         changeHBoxSettings(firstTabHBox, hBox, 0, counterForY, 0.0);
-        deleteAllButtons(firstTabPane, entityButton);
+        deleteAllButtons(firstTabPane, entityButton, entityDatabaseButton);
         entityButton.setLayoutY(entityButton.getLayoutY() + LAYOUT_Y);
         firstTabPane.getChildren().add(hBox);
         firstTabPane.getChildren().add(button);
         counterForY++;
         ENTITIES.add(new Entity(String.valueOf(++mainEntitiesCounter), hBox.getChildren().get(1)));
+        entityDatabaseButton.setLayoutY(entityDatabaseButton.getLayoutY() + LAYOUT_Y);
     }
 
     @FXML
@@ -162,29 +210,83 @@ public class PolytechController {
         if (ENTITIES.isEmpty()) {
             ENTITIES.add(new Entity("1", firstTabHBox.getChildren().get(1)));
         }
-        if (parametrizationTab.isSelected()) {
-            if ((BUTTON_CLICKS.isEmpty()) && (firstTextField.getText().isEmpty())) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setHeaderText("Невозможно перейти на эту вкладку!");
-                alert.setContentText("Должна быть создана хотя бы одна сущность!");
-                alert.showAndWait();
-                mainTabPane.getSelectionModel().select(0);
-            } else {
-                TextField textField = (TextField) secondTabHBox.getChildren().get(1);
-                textField.setText(firstTextField.getText());
-                textField.setMouseTransparent(true);
-                textField.setEditable(false);
-                getAllHBoxToParametrizationTab(
-                        firstTabPane,
-                        firstTabHBox,
-                        secondTabPane,
-                        secondTabHBox,
-                        parameterButton,
-                        parameterField,
-                        measurementField,
-                        valueField);
+        if (secondTabPane.getChildren().size() != 3) {
+            checkForNewEntities(
+                    firstTabPane,
+                    secondTabPane,
+                    secondTabHBox,
+                    parameterButton,
+                    parameterField,
+                    measurementField,
+                    valueField,
+                    parameterDatabaseButton);
+            return;
+        }
+        TextField textField = (TextField) secondTabHBox.getChildren().get(1);
+        textField.setText(firstTextField.getText());
+        textField.setMouseTransparent(true);
+        textField.setEditable(false);
+        getAllHBoxToParametrizationTab(
+                firstTabPane,
+                firstTabHBox,
+                secondTabPane,
+                secondTabHBox,
+                parameterButton,
+                parameterField,
+                measurementField,
+                valueField,
+                parameterDatabaseButton);
+    }
+
+    @FXML
+    private void onEntityDatabaseClicked() {
+        OffsetDateTime createdAt = OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+        for (Node node : firstTabPane.getChildren()) {
+            if (node instanceof HBox hBox) {
+                List<Node> nodes = hBox.getChildren();
+                String attribute = ((TextField) nodes.getLast()).getText();
+                String type = ((TextField) nodes.get(nodes.size() - 2)).getText();
+                String ontology = ((TextField) nodes.get(nodes.size() - 3)).getText();
+                String name = ((TextField) nodes.get(nodes.size() - 4)).getText();
+                if (entityRepository.findByAllFieldsExpectIdAndCreatedAt(name, ontology, type, attribute).isEmpty()) {
+                    int entityId = ThreadLocalRandom.current().nextInt();
+                    ENTITIES_ID.put(name, entityId);
+                    entityRepository.addEntity(entityId, name, ontology, type, attribute, createdAt);
+                }
             }
         }
+    }
+
+    @FXML
+    private void onParameterDatabaseClicked() {
+        OffsetDateTime createdAt = OffsetDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+        for (Node node : secondTabPane.getChildren()) {
+            if (node instanceof HBox hBox) {
+                List<Node> nodes = hBox.getChildren();
+                String entityName = ((TextField) nodes.get(nodes.size() - 2)).getText();
+                List<Node> parametersHBox = getParametersHBox(hBox);
+                for (Node nodeInPane : parametersHBox) {
+                    if (nodeInPane instanceof HBox hBoxInPane) {
+                        List<Node> parameterNodes = hBoxInPane.getChildren();
+                        int entityId = ENTITIES_ID.get(entityName);
+                        String parameterName = ((TextField) parameterNodes.getFirst()).getText();
+                        String measureUnit = ((TextField) parameterNodes.get(1)).getText();
+                        int value = Integer.parseInt(((TextField) parameterNodes.getLast()).getText());
+                        if (parameterRepository.findParameterByAllFieldsExceptParameterId(
+                                entityId, parameterName, measureUnit, value, 0).isEmpty()) {
+                            parameterRepository.addParameter(
+                                    entityId, parameterName, measureUnit, value, 0, createdAt);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private List<Node> getParametersHBox(HBox hBox) {
+        ScrollPane scrollPaneInsideHBox = (ScrollPane) hBox.getChildren().getLast();
+        AnchorPane anchorPaneInsideScrollPane = (AnchorPane) scrollPaneInsideHBox.getContent();
+        return anchorPaneInsideScrollPane.getChildren();
     }
 
     @FXML
@@ -242,11 +344,57 @@ public class PolytechController {
         thirdTabPane.getChildren().add(spreadsheetView);
     }
 
+    @FXML
+    private void onModelClicked() {
+        HBox hBox = getHBoxForModelTab(modelHBox);
+        modelCreation.setLayoutY(modelCreation.getLayoutY() + 77);
+        modelPane.getChildren().add(hBox);
+        counterForModel++;
+    }
+
+    private HBox getHBoxForModelTab(HBox modelHBox) {
+        HBox hBox = new HBox();
+        List<TextField> fields = List.of(modelCircle, modelName, formulaField);
+        List<TextArea> areas = List.of(parametersField, connectionChoice);
+        for (TextField textField : fields) {
+            TextField copy = makeCopyOfTextField(textField, modelCircle, counterForModel);
+            hBox.getChildren().add(copy);
+        }
+        for (TextArea area : areas) {
+            TextArea copy = makeCopyOfTextArea(area);
+            hBox.getChildren().add(copy);
+        }
+        hBox.setAlignment(Pos.CENTER);
+        hBox.setLayoutX(modelHBox.getLayoutX());
+        hBox.setLayoutY(modelHBox.getLayoutY() + ((counterForModel - 1) * 77));
+        hBox.setPrefWidth(modelHBox.getPrefWidth());
+        hBox.setPrefHeight(modelHBox.getPrefHeight());
+        return hBox;
+    }
+
+    private TextArea makeCopyOfTextArea(TextArea textArea) {
+        TextArea result = new TextArea();
+        changeTextArea(result, textArea);
+        return result;
+    }
+
+    private void changeTextArea(TextArea result, TextArea textArea) {
+        result.setPrefHeight(textArea.getPrefHeight());
+        result.setPrefWidth(textArea.getPrefWidth());
+        result.setPromptText(textArea.getPromptText());
+    }
+
+    @SneakyThrows
     private void handleMouseEvent(MouseEvent event, SpreadsheetCell cell, CellView view) {
-        if (event.getButton().equals(MouseButton.SECONDARY)) {
+        if (event.getButton().equals(MouseButton.MIDDLE)) {
             TextField verticalEntity = (TextField) ENTITIES.get(cell.getColumn() - 1).node;
             TextField horizontalEntity = (TextField) ENTITIES.get(cell.getRow() - 1).node;
+            this.verticalEntity.setText(verticalEntity.getText());
+            this.horizontalEntity.setText(horizontalEntity.getText());
+            this.characteristics.setText(view.getText());
             mainTabPane.getSelectionModel().select(3);
+            String text = MATH_MODELS.get(verticalEntity.getText() + " " + horizontalEntity.getText());
+            formula.setText(Objects.requireNonNullElse(text, "Математическая модель не найдена"));
         }
     }
 

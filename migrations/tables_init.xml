@@ -10,5 +10,7 @@
     <changeSet id="tables_init" author="Portnov_Egor">
         <sqlFile path="sql/entity.sql" relativeToChangelogFile="true"/>
         <sqlFile path="sql/parameter.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="sql/connection.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="sql/math_model.sql" relativeToChangelogFile="true"/>
     </changeSet>
 </databaseChangeLog>

@@ -9,12 +9,13 @@ import java.time.OffsetDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Entity {
+public class MathModel {
 
-    private int entityId;
+    private int firstEntityId;
+    private int secondEntityId;
+    private String firstEntityName;
+    private String secondEntityName;
     private String name;
-    private String ontology;
-    private String description;
-    private String attribute;
+    private String formula;
     private OffsetDateTime createdAt;
 }

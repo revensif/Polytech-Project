@@ -6,7 +6,7 @@ spring:
   liquibase:
     enabled: false
   datasource:
-    url: jdbc:postgresql://localhost:5432/scrapper
+    url: jdbc:postgresql://localhost:5432/polytech
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
