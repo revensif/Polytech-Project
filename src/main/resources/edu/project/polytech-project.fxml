@@ -8,7 +8,7 @@
          prefHeight="400.0" prefWidth="600.0" stylesheets="@AppCss.css" tabClosingPolicy="UNAVAILABLE"
          xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
          fx:controller="edu.project.PolytechController">
-    <Tab fx:id="systemTab" text="Описание системы">
+    <Tab fx:id="systemTab" onSelectionChanged="#onSystemTabClicked" text="Описание системы">
         <ScrollPane pannable="true">
             <AnchorPane fx:id="firstTabPane" focusTraversable="true" maxHeight="1.7976931348623157E308"
                         maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="202.0"
@@ -96,10 +96,18 @@
     </Tab>
     <Tab fx:id="matrixOfConnectionsTab" onSelectionChanged="#onMatrixOfConnectionsClicked" text="Матрица связей">
         <ScrollPane pannable="true">
-            <AnchorPane fx:id="thirdTabPane" minHeight="0.0" minWidth="0.0"/>
+            <AnchorPane fx:id="thirdTabPane" minHeight="0.0" minWidth="0.0">
+                <Button fx:id="connectionDatabaseButton" layoutX="156.0" mnemonicParsing="false"
+                        onAction="#onConnectionDatabaseClicked" prefHeight="38.0" prefWidth="289.0"
+                        text="Добавить все описания связей в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+            </AnchorPane>
         </ScrollPane>
     </Tab>
-    <Tab text="Свойства связей">
+    <Tab fx:id="propertiesTab" onSelectionChanged="#onPropertiesTabClicked" text="Свойства связей">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TextArea fx:id="characteristics" editable="false" layoutX="60.0" layoutY="219.0" prefHeight="120.0"
                       prefWidth="481.0" promptText="Качественные характеристики связи" wrapText="true"/>
@@ -119,7 +127,7 @@
             </TextField>
         </AnchorPane>
     </Tab>
-    <Tab text="Математические модели">
+    <Tab fx:id="modelTab" onSelectionChanged="#onModelTabClicked" text="Математические модели">
         <ScrollPane>
             <AnchorPane fx:id="modelPane" minHeight="0.0" minWidth="0.0">
                 <Button fx:id="modelCreation" layoutX="43.0" layoutY="143.0" mnemonicParsing="false"
@@ -144,10 +152,34 @@
                     <TextArea fx:id="connectionChoice" maxHeight="-Infinity" prefHeight="60.0" prefWidth="171.0"
                               promptText="Выбор связи (Пример: 1,2) 1 - Вертикальная сущность 2 - Горизонтальная"/>
                 </HBox>
+                <Button fx:id="mathModelDatabaseButton" layoutX="43.0" layoutY="24.0" mnemonicParsing="false"
+                        onAction="#onMathModelDatabaseClicked" prefHeight="38.0" prefWidth="262.0"
+                        text="Добавить все мат. модели в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="mathModelProcessButton" layoutX="383.0" layoutY="24.0" mnemonicParsing="false"
+                        onAction="#onMathModelProcessClicked" prefHeight="38.0" prefWidth="199.0"
+                        text="Рассчитать мат. модели">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
             </AnchorPane>
         </ScrollPane>
     </Tab>
-    <Tab text="Симуляция и оптимизация">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+    <Tab fx:id="resultTab" onSelectionChanged="#onResultTabClicked" text="Просмотр результата">
+        <ScrollPane>
+            <AnchorPane fx:id="lastTabPane" minHeight="0.0" minWidth="0.0">
+                <Button fx:id="resultDatabaseButton" layoutX="171.0" layoutY="40.0" mnemonicParsing="false"
+                        onAction="#onResultDatabaseClicked" prefHeight="38.0" prefWidth="256.0"
+                        text="Добавить все параметры в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+            </AnchorPane>
+        </ScrollPane>
     </Tab>
 </TabPane>

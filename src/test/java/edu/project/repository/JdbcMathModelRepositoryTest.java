@@ -33,7 +33,7 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
             FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME
     );
     private static final MathModel SECOND_MATH_MODEL = new MathModel(
-            FIRST_ID, SECOND_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME
+            FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME
     );
 
     @Autowired
@@ -43,7 +43,7 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
     private JdbcMathModelRepository mathModelRepository;
 
     @Test
-    void shouldAddConnectionToDatabase() {
+    void shouldAddMathModelToDatabase() {
         //arrange
         prepareDatabase();
         //act + assert
@@ -53,7 +53,7 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
                 .isEqualTo(FIRST_MATH_MODEL);
         assertThat(mathModelRepository.findAll().size()).isEqualTo(1);
         assertThat(mathModelRepository.findAll()).isEqualTo(List.of(FIRST_MATH_MODEL));
-        assertThat(mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME))
+        assertThat(mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME))
                 .isEqualTo(SECOND_MATH_MODEL);
         assertThat(mathModelRepository.findAll().size()).isEqualTo(2);
         assertThat(mathModelRepository.findAll()).isEqualTo(List.of(FIRST_MATH_MODEL, SECOND_MATH_MODEL));
@@ -65,7 +65,7 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    void shouldFindAllConnectionsFromDatabase() {
+    void shouldFindAllMathModelsFromDatabase() {
         //arrange
         prepareDatabase();
         //act + assert
@@ -74,17 +74,17 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
         mathModelRepository.addMathModel(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
         assertThat(mathModelRepository.findAll().size()).isEqualTo(1);
         assertThat(mathModelRepository.findAll()).isEqualTo(List.of(FIRST_MATH_MODEL));
-        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
+        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME);
         assertThat(mathModelRepository.findAll().size()).isEqualTo(2);
         assertThat(mathModelRepository.findAll()).isEqualTo(List.of(FIRST_MATH_MODEL, SECOND_MATH_MODEL));
     }
 
     @Test
-    void shouldDeleteConnectionFromDatabase() {
+    void shouldDeleteMathModelFromDatabase() {
         //arrange
         prepareDatabase();
         mathModelRepository.addMathModel(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
-        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
+        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME);
         //act + assert
         assertThat(mathModelRepository.findAll().size()).isEqualTo(2);
         assertThat(mathModelRepository.findAll()).isEqualTo(List.of(FIRST_MATH_MODEL, SECOND_MATH_MODEL));
@@ -103,15 +103,27 @@ public class JdbcMathModelRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    void shouldFindAllParametersByEntityId() {
+    void shouldFindAllMathModelsByEntityId() {
         //arrange
         prepareDatabase();
         mathModelRepository.addMathModel(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
-        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
+        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME);
         //act + assert
         assertThat(mathModelRepository.findMathModelByEntitiesId(FIRST_ID, FIRST_ID)).isEqualTo(FIRST_MATH_MODEL);
         assertThat(mathModelRepository.findMathModelByEntitiesId(FIRST_ID, SECOND_ID)).isEqualTo(SECOND_MATH_MODEL);
         assertThat(mathModelRepository.findMathModelByEntitiesId(SECOND_ID, SECOND_ID)).isNull();
+    }
+
+    @Test
+    void shouldFindAllMathModelsByEntityName() {
+        //arrange
+        prepareDatabase();
+        mathModelRepository.addMathModel(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, NAME, FORMULA, DATE_TIME);
+        mathModelRepository.addMathModel(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, NAME, FORMULA, DATE_TIME);
+        //act + assert
+        assertThat(mathModelRepository.findMathModelByEntitiesNames(FIRST_NAME, FIRST_NAME)).isEqualTo(FIRST_MATH_MODEL);
+        assertThat(mathModelRepository.findMathModelByEntitiesNames(FIRST_NAME, SECOND_NAME)).isEqualTo(SECOND_MATH_MODEL);
+        assertThat(mathModelRepository.findMathModelByEntitiesNames(SECOND_NAME, SECOND_NAME)).isNull();
     }
 
     private void prepareDatabase() {

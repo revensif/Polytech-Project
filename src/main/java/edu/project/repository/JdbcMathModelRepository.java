@@ -1,6 +1,8 @@
 package edu.project.repository;
 
+import edu.project.repository.entity.Connection;
 import edu.project.repository.entity.MathModel;
+import edu.project.repository.mapper.ConnectionRowMapper;
 import edu.project.repository.mapper.MathModelRowMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,6 +47,15 @@ public class JdbcMathModelRepository {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM math_model WHERE first_entity_id = ? AND second_entity_id = ?",
                     new MathModelRowMapper(), firstEntityId, secondEntityId);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
+    }
+
+    public MathModel findMathModelByEntitiesNames(String firstEntityName, String secondEntityName) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM math_model WHERE first_entity_name = ? AND second_entity_name = ?",
+                    new MathModelRowMapper(), firstEntityName, secondEntityName);
         } catch (EmptyResultDataAccessException exception) {
             return null;
         }

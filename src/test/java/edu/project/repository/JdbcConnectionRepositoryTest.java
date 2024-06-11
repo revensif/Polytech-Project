@@ -102,7 +102,7 @@ public class JdbcConnectionRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    void shouldFindAllParametersByEntityId() {
+    void shouldFindAllConnectionsByEntityId() {
         //arrange
         prepareDatabase();
         connectionRepository.addConnection(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, DESCRIPTION, DATE_TIME);
@@ -111,6 +111,18 @@ public class JdbcConnectionRepositoryTest extends IntegrationTest {
         assertThat(connectionRepository.findConnectionByEntitiesId(FIRST_ID, FIRST_ID)).isEqualTo(FIRST_CONNECTION);
         assertThat(connectionRepository.findConnectionByEntitiesId(FIRST_ID, SECOND_ID)).isEqualTo(SECOND_CONNECTION);
         assertThat(connectionRepository.findConnectionByEntitiesId(SECOND_ID, SECOND_ID)).isNull();
+    }
+
+    @Test
+    void shouldFindAllConnectionsByEntityName() {
+        //arrange
+        prepareDatabase();
+        connectionRepository.addConnection(FIRST_ID, FIRST_ID, FIRST_NAME, FIRST_NAME, DESCRIPTION, DATE_TIME);
+        connectionRepository.addConnection(FIRST_ID, SECOND_ID, FIRST_NAME, SECOND_NAME, DESCRIPTION, DATE_TIME);
+        //act + assert
+        assertThat(connectionRepository.findConnectionByEntitiesNames(FIRST_NAME, FIRST_NAME)).isEqualTo(FIRST_CONNECTION);
+        assertThat(connectionRepository.findConnectionByEntitiesNames(FIRST_NAME, SECOND_NAME)).isEqualTo(SECOND_CONNECTION);
+        assertThat(connectionRepository.findConnectionByEntitiesNames(SECOND_NAME, FIRST_NAME)).isNull();
     }
 
     private void prepareDatabase() {

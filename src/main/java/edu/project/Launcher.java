@@ -1,7 +1,9 @@
 package edu.project;
 
+import javafx.application.Application;
+
 public class Launcher {
     public static void main(String[] args) {
-        PolytechApplication.main(args);
+        Application.launch(PolytechApplication.class, args);
     }
 }

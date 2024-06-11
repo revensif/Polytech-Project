@@ -6,14 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -101,7 +98,7 @@ public class JdbcParameterRepositoryTest extends IntegrationTest {
     }
 
     @Test
-    void shouldFindParameterByAllFieldsExceptParameterId() {
+    void shouldFindParameterByAllFieldsExceptParameterIdAndCreatedAt() {
         //arrange
         prepareDatabase();
         parameterRepository.addParameter(FIRST_ID, NAME, MEASURE_UNIT, VALUE, 0, DATE_TIME);

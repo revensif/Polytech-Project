@@ -62,7 +62,7 @@ public final class SecondTabUtils {
         return getInts(hBoxFromFirstTab.getLayoutX(), hBoxFromFirstTab.getLayoutY(), secondTabHBox.getLayoutX(), secondTabHBox.getLayoutY());
     }
 
-    private static HBox makeCopyOfHBox(HBox hBox, TextField parameterField, TextField measurementField, TextField valueField) {
+    public static HBox makeCopyOfHBox(HBox hBox, TextField parameterField, TextField measurementField, TextField valueField) {
         HBox result = new HBox();
         TextField circleField = (TextField) hBox.getChildren().getFirst();
         TextField firstCopy = makeCopyOfTextFieldForSecondTab(circleField);

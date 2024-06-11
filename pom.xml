@@ -359,6 +359,7 @@
                 <configuration>
                     <mainClassName>edu.project.PolytechApplication</mainClassName>
                     <port>8090</port>
+                    <openURLOnStartup>false</openURLOnStartup>
                 </configuration>
             </plugin>
             <plugin>

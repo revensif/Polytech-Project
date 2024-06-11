@@ -48,6 +48,15 @@ public class JdbcConnectionRepository {
         }
     }
 
+    public Connection findConnectionByEntitiesNames(String firstEntityName, String secondEntityName) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM connection WHERE first_entity_name = ? AND second_entity_name = ?",
+                    new ConnectionRowMapper(), firstEntityName, secondEntityName);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
+    }
+
     public List<Connection> findAll() {
         return jdbcTemplate.query("SELECT * FROM connection", new ConnectionRowMapper());
     }
