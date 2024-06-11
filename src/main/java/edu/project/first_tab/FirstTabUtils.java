@@ -18,8 +18,9 @@ public final class FirstTabUtils {
     private FirstTabUtils() {
     }
 
-    public static void deleteAllButtons(AnchorPane firstTabPane, Button entityButton) {
-        firstTabPane.getChildren().removeIf((node) -> ((node instanceof Button) && (!node.equals(entityButton))));
+    public static void deleteAllButtons(AnchorPane firstTabPane, Button entityButton, Button entityDatabaseButton) {
+        firstTabPane.getChildren().removeIf((node) ->
+                ((node instanceof Button) && (!node.equals(entityButton)) && (!node.equals(entityDatabaseButton))));
     }
 
     public static TextField makeCopyOfTextField(TextField textfield, TextField circleTextField, int counterForCircle) {

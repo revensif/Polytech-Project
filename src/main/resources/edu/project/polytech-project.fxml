@@ -1,41 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.effect.Blend?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
-
-<TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@AppCss.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.project.PolytechController">
-    <Tab text="Описание системы">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<TabPane fx:id="mainTabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="400.0" prefWidth="600.0" stylesheets="@AppCss.css" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="edu.project.PolytechController">
+    <Tab fx:id="systemTab" onSelectionChanged="#onSystemTabClicked" text="Описание системы">
         <ScrollPane pannable="true">
-            <AnchorPane fx:id="firstTabPane" focusTraversable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <HBox fx:id="firstTabHBox" alignment="CENTER" layoutX="18.0" layoutY="28.0" prefHeight="56.0" prefWidth="562.0" spacing="1.0">
-                    <TextField fx:id="circleTextField" alignment="CENTER" editable="false" mouseTransparent="true" prefHeight="32.0" prefWidth="31.0" styleClass="circleTextField" text="1" />
-                    <TextField fx:id="firstTextField" prefHeight="51.0" prefWidth="130.0" promptText="Название сущности" />
-                    <TextField fx:id="secondTextField" prefHeight="51.0" prefWidth="130.0" promptText="Онтология" />
-                    <TextField fx:id="thirdTextField" prefHeight="51.0" prefWidth="130.0" promptText="Тип сущности" />
-                    <TextField fx:id="fourthTextField" prefHeight="51.0" prefWidth="130.0" promptText="Оценочный атрибут" />
+            <AnchorPane fx:id="firstTabPane" focusTraversable="true" maxHeight="1.7976931348623157E308"
+                        maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="202.0"
+                        prefWidth="580.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <HBox fx:id="firstTabHBox" alignment="CENTER" layoutX="18.0" layoutY="28.0" prefHeight="56.0"
+                      prefWidth="562.0" spacing="1.0">
+                    <TextField fx:id="circleTextField" alignment="CENTER" editable="false" mouseTransparent="true"
+                               prefHeight="32.0" prefWidth="31.0" styleClass="circleTextField" text="1"/>
+                    <TextField fx:id="firstTextField" prefHeight="51.0" prefWidth="130.0"
+                               promptText="Название сущности"/>
+                    <TextField fx:id="secondTextField" prefHeight="51.0" prefWidth="130.0" promptText="Онтология"/>
+                    <TextField fx:id="thirdTextField" prefHeight="51.0" prefWidth="130.0" promptText="Тип сущности"/>
+                    <TextField fx:id="fourthTextField" prefHeight="51.0" prefWidth="130.0"
+                               promptText="Оценочный атрибут"/>
                 </HBox>
-                <Button fx:id="subLevelButton" layoutX="71.0" layoutY="84.0" mnemonicParsing="false" onAction="#onSubLevelClicked" styleClass="transparentButton" text="+ Добавить подуровень">
+                <Button fx:id="subLevelButton" layoutX="71.0" layoutY="84.0" mnemonicParsing="false"
+                        onAction="#onSubLevelClicked" styleClass="transparentButton" text="+ Добавить подуровень">
                     <effect>
-                        <Blend />
+                        <Blend/>
                     </effect>
                     <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="12.0"/>
                     </font>
                 </Button>
-                <Button fx:id="entityButton" layoutX="24.0" layoutY="115.0" mnemonicParsing="false" onAction="#onEntityClicked" styleClass="transparentButton" text="+ Добавить сущность">
+                <Button fx:id="entityButton" layoutX="24.0" layoutY="115.0" mnemonicParsing="false"
+                        onAction="#onEntityClicked" styleClass="transparentButton" text="+ Добавить сущность">
                     <effect>
-                        <Blend />
+                        <Blend/>
                     </effect>
                     <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="entityDatabaseButton" layoutX="162.0" layoutY="150.0" mnemonicParsing="false"
+                        onAction="#onEntityDatabaseClicked" prefHeight="38.0" prefWidth="256.0"
+                        text="Добавить все сущности в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
                     </font>
                 </Button>
             </AnchorPane>
@@ -43,49 +55,131 @@
     </Tab>
     <Tab fx:id="parametrizationTab" onSelectionChanged="#onParametrizationTabClicked" text="Параметризация">
         <ScrollPane pannable="true">
-            <AnchorPane fx:id="secondTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
-                <Button fx:id="parameterButton" layoutX="179.0" layoutY="83.0" mnemonicParsing="false" onAction="#onParameterClicked" styleClass="transparentButton" text="+ Добавить параметр">
+            <AnchorPane fx:id="secondTabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                        minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="580.0">
+                <Button fx:id="parameterButton" layoutX="179.0" layoutY="83.0" mnemonicParsing="false"
+                        onAction="#onParameterClicked" styleClass="transparentButton" text="+ Добавить параметр">
                     <effect>
-                        <Blend />
+                        <Blend/>
                     </effect>
                     <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="12.0"/>
                     </font>
                 </Button>
-                <HBox fx:id="secondTabHBox" alignment="CENTER" layoutX="18.0" layoutY="28.0" prefHeight="56.0" prefWidth="562.0" spacing="1.0">
-                    <TextField alignment="CENTER" editable="false" mouseTransparent="true" prefHeight="32.0" prefWidth="31.0" styleClass="circleTextField" text="1" />
-                    <TextField prefHeight="51.0" prefWidth="130.0" promptText="Название сущности" />
+                <HBox fx:id="secondTabHBox" alignment="CENTER" layoutX="18.0" layoutY="28.0" prefHeight="56.0"
+                      prefWidth="562.0" spacing="1.0">
+                    <TextField alignment="CENTER" editable="false" mouseTransparent="true" prefHeight="32.0"
+                               prefWidth="31.0" styleClass="circleTextField" text="1"/>
+                    <TextField prefHeight="51.0" prefWidth="130.0" promptText="Название сущности"/>
                     <ScrollPane pannable="true" prefHeight="51.0" prefWidth="400.0">
                         <AnchorPane minHeight="0.0" minWidth="0.0">
                             <HBox alignment="CENTER" prefHeight="25.0" prefWidth="380.0" spacing="1.0">
-                                <TextField fx:id="parameterField" prefHeight="25.0" prefWidth="210.0" promptText="Параметр 1" />
-                                <TextField fx:id="measurementField" prefHeight="25.0" prefWidth="210.0" promptText="Единица измерения" />
-                                <TextField fx:id="valueField" prefHeight="25.0" prefWidth="210.0" promptText="Значение" />
+                                <TextField fx:id="parameterField" prefHeight="25.0" prefWidth="210.0"
+                                           promptText="Параметр 1"/>
+                                <TextField fx:id="measurementField" prefHeight="25.0" prefWidth="210.0"
+                                           promptText="Единица измерения"/>
+                                <TextField fx:id="valueField" prefHeight="25.0" prefWidth="210.0"
+                                           promptText="Значение"/>
                             </HBox>
                         </AnchorPane>
                     </ScrollPane>
                 </HBox>
+                <Button fx:id="parameterDatabaseButton" layoutX="162.0" layoutY="130.0" mnemonicParsing="false"
+                        onAction="#onParameterDatabaseClicked" prefHeight="38.0" prefWidth="256.0"
+                        text="Добавить все параметры в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
             </AnchorPane>
         </ScrollPane>
     </Tab>
     <Tab fx:id="matrixOfConnectionsTab" onSelectionChanged="#onMatrixOfConnectionsClicked" text="Матрица связей">
         <ScrollPane pannable="true">
-            <AnchorPane fx:id="thirdTabPane" minHeight="0.0" minWidth="0.0" />
+            <AnchorPane fx:id="thirdTabPane" minHeight="0.0" minWidth="0.0">
+                <Button fx:id="connectionDatabaseButton" layoutX="156.0" mnemonicParsing="false"
+                        onAction="#onConnectionDatabaseClicked" prefHeight="38.0" prefWidth="289.0"
+                        text="Добавить все описания связей в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+            </AnchorPane>
         </ScrollPane>
     </Tab>
-    <Tab text="Свойства связей">
+    <Tab fx:id="propertiesTab" onSelectionChanged="#onPropertiesTabClicked" text="Свойства связей">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-         <children>
-            <TextArea fx:id="characteristics" layoutX="61.0" layoutY="215.0" prefHeight="112.0" prefWidth="352.0" promptText="Качественные характеристики связи" />
-            <TextArea fx:id="formula" accessibleRoleDescription="y" layoutX="168.0" layoutY="77.0" prefHeight="110.0" prefWidth="154.0" promptText="Формула мат. модели" />
-            <TextField fx:id="verticalEntity" alignment="CENTER" layoutX="171.0" layoutY="41.0" promptText="Сущность Y" styleClass="transparentButton" />
-            <TextField fx:id="horizontalEntity" alignment="CENTER" layoutX="14.0" layoutY="120.0" promptText="Сущность X" styleClass="transparentButton" />
-         </children></AnchorPane>
+            <TextArea fx:id="characteristics" editable="false" layoutX="60.0" layoutY="219.0" prefHeight="120.0"
+                      prefWidth="481.0" promptText="Качественные характеристики связи" wrapText="true"/>
+            <TextArea fx:id="formula" accessibleRoleDescription="y" editable="false" layoutX="194.0" layoutY="95.0"
+                      prefHeight="100.0" prefWidth="212.0" promptText="Формула мат. модели" wrapText="true"/>
+            <TextField fx:id="horizontalEntity" alignment="CENTER" editable="false" layoutX="24.0" layoutY="120.0"
+                       prefHeight="50.0" prefWidth="150.0" promptText="Сущность X" styleClass="transparentButton">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </TextField>
+            <TextField fx:id="verticalEntity" alignment="CENTER" editable="false" layoutX="225.0" layoutY="25.0"
+                       prefHeight="50.0" prefWidth="150.0" promptText="Сущность Y" styleClass="transparentButton">
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
+            </TextField>
+        </AnchorPane>
     </Tab>
-    <Tab text="Математические модели">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+    <Tab fx:id="modelTab" onSelectionChanged="#onModelTabClicked" text="Математические модели">
+        <ScrollPane>
+            <AnchorPane fx:id="modelPane" minHeight="0.0" minWidth="0.0">
+                <Button fx:id="modelCreation" layoutX="43.0" layoutY="143.0" mnemonicParsing="false"
+                        onAction="#onModelClicked" prefHeight="26.0" prefWidth="133.0" styleClass="transparentButton"
+                        text="+ Добавить модель">
+                    <effect>
+                        <Blend/>
+                    </effect>
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <HBox fx:id="modelHBox" alignment="CENTER" layoutX="6.0" layoutY="75.0" maxHeight="-Infinity"
+                      maxWidth="-Infinity" prefHeight="60.0" prefWidth="590.0">
+                    <TextField fx:id="modelCircle" alignment="CENTER" editable="false" mouseTransparent="true"
+                               prefHeight="32.0" prefWidth="31.0" styleClass="circleTextField" text="1"/>
+                    <TextField fx:id="modelName" prefHeight="60.0" prefWidth="125.0" promptText="Название модели"/>
+                    <TextField fx:id="formulaField" prefHeight="60.0" prefWidth="150.0"
+                               promptText="Формула (без пробелов)"/>
+                    <TextArea fx:id="parametersField" maxHeight="-Infinity" prefHeight="60.0" prefWidth="110.0"
+                              promptText="Используемые параметры (Пример: p.1,l.2)"/>
+                    <TextArea fx:id="connectionChoice" maxHeight="-Infinity" prefHeight="60.0" prefWidth="171.0"
+                              promptText="Выбор связи (Пример: 1,2) 1 - Вертикальная сущность 2 - Горизонтальная"/>
+                </HBox>
+                <Button fx:id="mathModelDatabaseButton" layoutX="43.0" layoutY="24.0" mnemonicParsing="false"
+                        onAction="#onMathModelDatabaseClicked" prefHeight="38.0" prefWidth="262.0"
+                        text="Добавить все мат. модели в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+                <Button fx:id="mathModelProcessButton" layoutX="383.0" layoutY="24.0" mnemonicParsing="false"
+                        onAction="#onMathModelProcessClicked" prefHeight="38.0" prefWidth="199.0"
+                        text="Рассчитать мат. модели">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+            </AnchorPane>
+        </ScrollPane>
     </Tab>
-    <Tab text="Симуляция и оптимизация">
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+    <Tab fx:id="resultTab" onSelectionChanged="#onResultTabClicked" text="Просмотр результата">
+        <ScrollPane>
+            <AnchorPane fx:id="lastTabPane" minHeight="0.0" minWidth="0.0">
+                <Button fx:id="resultDatabaseButton" layoutX="171.0" layoutY="40.0" mnemonicParsing="false"
+                        onAction="#onResultDatabaseClicked" prefHeight="38.0" prefWidth="256.0"
+                        text="Добавить все параметры в базу данных">
+                    <font>
+                        <Font name="System Bold" size="12.0"/>
+                    </font>
+                </Button>
+            </AnchorPane>
+        </ScrollPane>
     </Tab>
 </TabPane>

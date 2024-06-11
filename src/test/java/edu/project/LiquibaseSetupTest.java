@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiquibaseSetupTest extends IntegrationTest {
 
-    private static final List<String> EXPECTED_TABLES = List.of("entity", "parameter");
+    private static final List<String> EXPECTED_TABLES = List.of("entity", "parameter", "connection", "math_model");
 
     @Test
     public void shouldGetAllTablesInDatabase() throws SQLException {

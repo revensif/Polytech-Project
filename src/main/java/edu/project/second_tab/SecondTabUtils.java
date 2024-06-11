@@ -8,6 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static edu.project.PolytechController.*;
 import static edu.project.first_tab.FirstTabUtils.getButton;
 
@@ -30,7 +33,8 @@ public final class SecondTabUtils {
             Button parameterButton,
             TextField parameterField,
             TextField measurementField,
-            TextField valueField) {
+            TextField valueField,
+            Button parameterDatabaseButton) {
         for (Node node : firstTabPane.getChildren()) {
             if (node instanceof HBox) {
                 boolean flag = false;
@@ -49,6 +53,7 @@ public final class SecondTabUtils {
                 }
                 Button button = getButton(position[0], position[1], parameterButton);
                 secondTabPane.getChildren().add(button);
+                parameterDatabaseButton.setLayoutY(parameterDatabaseButton.getLayoutY() + LAYOUT_Y);
             }
         }
     }
@@ -57,7 +62,7 @@ public final class SecondTabUtils {
         return getInts(hBoxFromFirstTab.getLayoutX(), hBoxFromFirstTab.getLayoutY(), secondTabHBox.getLayoutX(), secondTabHBox.getLayoutY());
     }
 
-    private static HBox makeCopyOfHBox(HBox hBox, TextField parameterField, TextField measurementField, TextField valueField) {
+    public static HBox makeCopyOfHBox(HBox hBox, TextField parameterField, TextField measurementField, TextField valueField) {
         HBox result = new HBox();
         TextField circleField = (TextField) hBox.getChildren().getFirst();
         TextField firstCopy = makeCopyOfTextFieldForSecondTab(circleField);
@@ -119,6 +124,45 @@ public final class SecondTabUtils {
         result.setEditable(false);
         result.setMouseTransparent(true);
         return result;
+    }
+
+    public static void checkForNewEntities(
+            AnchorPane firstTabPane,
+            AnchorPane secondTabPane,
+            HBox secondTabHBox,
+            Button parameterButton,
+            TextField parameterField,
+            TextField measurementField,
+            TextField valueField,
+            Button parameterDatabaseButton) {
+        List<HBox> firstTabHboxList = new ArrayList<>();
+        for (Node node : firstTabPane.getChildren()) {
+            if (node instanceof HBox) {
+                firstTabHboxList.add((HBox) node);
+            }
+        }
+        List<HBox> secondTabHboxList = new ArrayList<>();
+        for (Node node : secondTabPane.getChildren()) {
+            if (node instanceof HBox) {
+                secondTabHboxList.add((HBox) node);
+            }
+        }
+        boolean flag = false;
+        for (int i = secondTabHboxList.size(); i < firstTabHboxList.size(); i++) {
+            HBox hbox = makeCopyOfHBox(firstTabHboxList.get(i), parameterField, measurementField, valueField);
+            secondTabPane.getChildren().add(hbox);
+            if (hbox.getChildren().size() == 2) {
+                hbox.setLayoutX(hbox.getLayoutX() - 16.0);
+                flag = true;
+            }
+            int[] position = getHBoxPosition(hbox, secondTabHBox);
+            if (flag) {
+                hbox.setLayoutX(hbox.getLayoutX() + 16.0);
+            }
+            Button button = getButton(position[0], position[1], parameterButton);
+            secondTabPane.getChildren().add(button);
+            parameterDatabaseButton.setLayoutY(parameterDatabaseButton.getLayoutY() + LAYOUT_Y);
+        }
     }
 
     public static AnchorPane getHBoxInAnchorPaneThatIsInScrollPane(HBox hBox) throws IllegalAccessException {
