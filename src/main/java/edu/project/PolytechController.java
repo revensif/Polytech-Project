@@ -840,7 +840,8 @@ public class PolytechController {
                     Connection connectionByIds = connectionRepository.findConnectionByEntitiesId(firstEntityId, secondEntityId);
                     Connection connectionByNames = connectionRepository.findConnectionByEntitiesNames(firstEntityName, secondEntityName);
                     if ((connectionByIds == null) && (connectionByNames == null)) {
-                        String description = client.getGigaChatToken().getAccessToken();
+                        String message = constructMessageForDescription(firstEntityName, secondEntityName);
+                        String description = client.getResponseAfterSendingMessageToGigaChat(message);
                         createCell(row, column, currentRow, description, true);
                     } else if (connectionByIds == null) {
                         createCell(row, column, currentRow, connectionByNames.getDescription(), true);
